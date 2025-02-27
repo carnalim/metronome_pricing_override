@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metronome Contract Amendment Tool</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Metronome Contract Amendment Tool</h1>
+        <div class="intro">
+            <p>This tool helps you amend Metronome contracts by updating product pricing. Follow the steps below to create and submit your amendment.</p>
+            <p class="workflow">Workflow: Enter Bearer Token → Select Customer → Select Contract → Select Product → Set Dates → Enter Model Name and Price → Submit</p>
+        </div>
+        
+        <div class="section" id="auth-section">
+            <h2>Authentication</h2>
+            <p class="help-text">Enter your Metronome API bearer token. The token will be saved in your browser for future use.</p>
+            <div class="form-group">
+                <label for="bearer-token">Bearer Token:</label>
+                <input type="password" id="bearer-token" placeholder="Enter your bearer token">
+                <button id="save-token">Save Token</button>
+                <button id="clear-token">Clear Token</button>
+                <span id="token-status"></span>
+            </div>
+        </div>
+
+        <div class="section" id="customer-section">
+            <h2>Select Customer</h2>
+            <p class="help-text">Click "Fetch Customers" to retrieve a list of customers from the Metronome API.</p>
+            <button id="fetch-customers">Fetch Customers</button>
+            <div class="form-group">
+                <label for="customer-select">Customer:</label>
+                <select id="customer-select" disabled>
+                    <option value="">Select a customer</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="section" id="contract-section">
+            <h2>Select Contract</h2>
+            <p class="help-text">After selecting a customer, click "Fetch Contracts" to retrieve the customer's contracts.</p>
+            <button id="fetch-contracts">Fetch Contracts</button>
+            <div class="form-group">
+                <label for="contract-select">Contract:</label>
+                <select id="contract-select" disabled>
+                    <option value="">Select a contract</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="section" id="product-section">
+            <h2>Select Product</h2>
+            <p class="help-text">Click "Fetch Products" to retrieve available products from the Metronome API.</p>
+            <button id="fetch-products">Fetch Products</button>
+            <div class="form-group">
+                <label for="product-select">Product:</label>
+                <select id="product-select" disabled>
+                    <option value="">Select a product</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="section" id="dates-section">
+            <h2>Dates</h2>
+            <p class="help-text">Select the starting date for the contract amendment and the override date.</p>
+            <div class="form-group">
+                <label for="starting-at">Starting At:</label>
+                <input type="text" id="starting-at" placeholder="Select date" readonly>
+                <small>The date when the contract amendment takes effect</small>
+            </div>
+            <div class="form-group">
+                <label for="override-starting-at">Override Starting At:</label>
+                <input type="text" id="override-starting-at" placeholder="Select date" readonly>
+                <small>The date when the override pricing takes effect</small>
+            </div>
+        </div>
+
+        <div class="section" id="model-section">
+            <h2>Model Details</h2>
+            <p class="help-text">Enter the model name for the pricing group values.</p>
+            <div class="form-group">
+                <label for="model-name">Model Name:</label>
+                <input type="text" id="model-name" placeholder="Enter model name">
+                <small>Example: parasail-qwen2-vl-72b-instruct</small>
+            </div>
+        </div>
+
+        <div class="section" id="price-section">
+            <h2>Price</h2>
+            <p class="help-text">Enter the new price for the selected product and model.</p>
+            <div class="form-group">
+                <label for="price">Price:</label>
+                <input type="number" id="price" placeholder="Enter price">
+                <small>The flat rate price for the product</small>
+            </div>
+        </div>
+
+        <div class="section" id="submit-section">
+            <p class="help-text">Once all fields are filled, click the button below to submit the contract amendment.</p>
+            <button id="submit-amendment">Submit Amendment</button>
+        </div>
+
+        <div class="section" id="result-section">
+            <h2>Result</h2>
+            <p class="help-text">The API response will appear here after submission.</p>
+            <pre id="result-output"></pre>
+        </div>
+    </div>
+
+    <footer>
+        <p>Metronome Contract Amendment Tool | <a href="https://docs.metronome.com/api/" target="_blank">API Documentation</a></p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="script.js"></script>
+</body>
+</html>
