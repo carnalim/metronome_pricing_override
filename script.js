@@ -115,25 +115,47 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             resultOutput.textContent = 'Fetching customers...';
             
+            // Get the token and check if it exists
+            const token = localStorage.getItem('metronomeToken');
+            if (!token) {
+                throw new Error('No token found. Please save your bearer token first.');
+            }
+            
+            console.log('Fetching customers from:', `${API_BASE_URL}/customers`);
+            
             const response = await fetch(`${API_BASE_URL}/customers`, {
                 method: 'GET',
-                headers: getAuthHeader()
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
             });
 
+            console.log('Response status:', response.status);
+            
             if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+                const errorText = await response.text();
+                console.error('Error response:', errorText);
+                throw new Error(`HTTP error! Status: ${response.status}, Details: ${errorText}`);
             }
 
             const data = await response.json();
+            console.log('Customer data:', data);
             
             // Clear existing options
             customerSelect.innerHTML = '<option value="">Select a customer</option>';
+            
+            // Check if data has the expected structure
+            if (!data.customers || !Array.isArray(data.customers)) {
+                console.error('Unexpected API response format:', data);
+                throw new Error('Unexpected API response format. Check console for details.');
+            }
             
             // Add customer options
             data.customers.forEach(customer => {
                 const option = document.createElement('option');
                 option.value = customer.id;
-                option.textContent = `${customer.name} (${customer.id})`;
+                option.textContent = `${customer.name || 'Unnamed'} (${customer.id})`;
                 customerSelect.appendChild(option);
             });
             
@@ -157,19 +179,41 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             resultOutput.textContent = 'Fetching contracts...';
             
+            // Get the token and check if it exists
+            const token = localStorage.getItem('metronomeToken');
+            if (!token) {
+                throw new Error('No token found. Please save your bearer token first.');
+            }
+            
+            console.log('Fetching contracts from:', `${API_BASE_URL}/customers/${customerId}/contracts`);
+            
             const response = await fetch(`${API_BASE_URL}/customers/${customerId}/contracts`, {
                 method: 'GET',
-                headers: getAuthHeader()
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
             });
 
+            console.log('Response status:', response.status);
+            
             if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+                const errorText = await response.text();
+                console.error('Error response:', errorText);
+                throw new Error(`HTTP error! Status: ${response.status}, Details: ${errorText}`);
             }
 
             const data = await response.json();
+            console.log('Contract data:', data);
             
             // Clear existing options
             contractSelect.innerHTML = '<option value="">Select a contract</option>';
+            
+            // Check if data has the expected structure
+            if (!data.contracts || !Array.isArray(data.contracts)) {
+                console.error('Unexpected API response format:', data);
+                throw new Error('Unexpected API response format. Check console for details.');
+            }
             
             // Add contract options
             data.contracts.forEach(contract => {
@@ -193,25 +237,47 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             resultOutput.textContent = 'Fetching products...';
             
+            // Get the token and check if it exists
+            const token = localStorage.getItem('metronomeToken');
+            if (!token) {
+                throw new Error('No token found. Please save your bearer token first.');
+            }
+            
+            console.log('Fetching products from:', `${API_BASE_URL}/products`);
+            
             const response = await fetch(`${API_BASE_URL}/products`, {
                 method: 'GET',
-                headers: getAuthHeader()
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
             });
 
+            console.log('Response status:', response.status);
+            
             if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+                const errorText = await response.text();
+                console.error('Error response:', errorText);
+                throw new Error(`HTTP error! Status: ${response.status}, Details: ${errorText}`);
             }
 
             const data = await response.json();
+            console.log('Product data:', data);
             
             // Clear existing options
             productSelect.innerHTML = '<option value="">Select a product</option>';
+            
+            // Check if data has the expected structure
+            if (!data.products || !Array.isArray(data.products)) {
+                console.error('Unexpected API response format:', data);
+                throw new Error('Unexpected API response format. Check console for details.');
+            }
             
             // Add product options
             data.products.forEach(product => {
                 const option = document.createElement('option');
                 option.value = product.id;
-                option.textContent = `${product.name} (${product.id})`;
+                option.textContent = `${product.name || 'Unnamed'} (${product.id})`;
                 productSelect.appendChild(option);
             });
             
@@ -249,6 +315,12 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             resultOutput.textContent = 'Submitting amendment...';
             
+            // Get the token and check if it exists
+            const token = localStorage.getItem('metronomeToken');
+            if (!token) {
+                throw new Error('No token found. Please save your bearer token first.');
+            }
+            
             const payload = {
                 customer_id: customerId,
                 contract_id: contractId,
@@ -268,14 +340,23 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }]
             };
-
+            
+            console.log('Submitting amendment to:', `${API_BASE_URL}/contracts/amend`);
+            console.log('Payload:', JSON.stringify(payload, null, 2));
+            
             const response = await fetch(`${API_BASE_URL}/contracts/amend`, {
                 method: 'POST',
-                headers: getAuthHeader(),
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify(payload)
             });
-
+            
+            console.log('Response status:', response.status);
+            
             const data = await response.json();
+            console.log('Response data:', data);
 
             if (!response.ok) {
                 throw new Error(`${response.status}: ${JSON.stringify(data)}`);
